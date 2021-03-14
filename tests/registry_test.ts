@@ -70,8 +70,7 @@ Deno.test('registry_test', async function () {
 		);
 
 		task(prereq, []);
-		await run(normalTask), // Should now run OK.
-			(task(normalTask).prereqs = ['missing-task']);
+		await run(normalTask), (task(normalTask).prereqs = ['missing-task']);
 		await assertThrowsAsync(
 			async () => await run(normalTask),
 			TaskError,

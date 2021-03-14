@@ -1,7 +1,7 @@
 import { colors, existsSync, path } from './deps.ts';
 import { env } from './env.ts';
 import { Graph } from './graph.ts';
-import { abort, debug, TaskError, glob, log, readFile, vers, writeFile } from './utils.ts';
+import { abort, debug, glob, log, readFile, TaskError, vers, writeFile } from './utils.ts';
 
 // deno-lint-ignore no-explicit-any
 export type Action = (this: Task) => any;
@@ -129,9 +129,11 @@ export class Task {
 				}
 				const curr = Task.fileInfo(filename);
 				if (curr.size !== prev.size || curr.mtime !== prev.mtime) {
-					debugMsg = `true: ${filename}\nfrom: ${JSON.stringify(prev)}\nto:   ${JSON.stringify(
-						curr
-					)}`;
+					debugMsg = `true: ${filename}\nfrom: ${JSON.stringify(prev)}\nto:   ${
+						JSON.stringify(
+							curr
+						)
+					}`;
 					result = true;
 					break;
 				}
@@ -275,9 +277,11 @@ export class TaskRegistry extends Map<string, Task> {
 				msg = colors.green(msg);
 			}
 			if (env('--list-all') && task.prereqs.length > 0) {
-				msg += `\n${task.prereqs
-					.map((prereq) => `${' '.repeat(maxLen)} ${colors.yellow(prereq)}`)
-					.join('\n')}`;
+				msg += `\n${
+					task.prereqs
+						.map((prereq) => `${' '.repeat(maxLen)} ${colors.yellow(prereq)}`)
+						.join('\n')
+				}`;
 			}
 			result.push(msg);
 		}

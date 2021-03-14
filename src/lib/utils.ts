@@ -329,9 +329,11 @@ export async function shCapture(command: string, opts: ShCaptureOpts = {}): Prom
 	} as const;
 	debug(
 		'shCapture',
-		`${command}\n=> ${shellCMD}\nopts:      ${JSON.stringify(opts)}\noutputs:   ${JSON.stringify(
-			result
-		)}`
+		`${command}\n=> ${shellCMD}\nopts:      ${JSON.stringify(opts)}\noutputs:   ${
+			JSON.stringify(
+				result
+			)
+		}`
 	);
 	return result;
 }

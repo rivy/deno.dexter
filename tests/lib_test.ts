@@ -4,7 +4,6 @@ import type { ShCaptureOpts, ShOpts, ShOutput } from '../lib.ts';
 export {
 	abort,
 	debug,
-	TaskError,
 	glob,
 	log,
 	makeDir,
@@ -12,6 +11,7 @@ export {
 	readFile,
 	sh,
 	shCapture,
+	TaskError,
 	updateFile,
 	writeFile,
 } from '../lib.ts';

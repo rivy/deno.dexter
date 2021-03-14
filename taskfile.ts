@@ -15,11 +15,9 @@ const quiet = env('--quiet') ? '--quiet' : '';
 
 env('--default-task', 'test');
 
-const TS_FILES = [
-	...glob('*.ts'),
-	...glob('src/**/*.ts'),
-	...glob('+(examples|tests)/*.ts'),
-].filter((p) => !p.endsWith('.d.ts'));
+const TS_FILES = [...glob('*.ts'), ...glob('src/**/*.ts'), ...glob('+(examples|tests)/*.ts')].filter(
+	(p) => !p.endsWith('.d.ts')
+);
 
 desc('Minimal task');
 task('hello', [], function () {

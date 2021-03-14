@@ -6,7 +6,6 @@ export type { Action, Task } from './src/lib/tasks.ts';
 export {
 	abort,
 	debug,
-	TaskError,
 	glob,
 	log,
 	makeDir,
@@ -14,6 +13,7 @@ export {
 	readFile,
 	sh,
 	shCapture,
+	TaskError,
 	updateFile,
 	vers,
 	writeFile,

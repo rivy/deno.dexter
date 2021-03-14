@@ -7,7 +7,7 @@ import { desc, env, execute, glob, run, sh, task } from '../mod.ts';
 desc('command-line usage');
 task('help', [], function () {
 	console.log(`
-Example taskfile illustrating dynamic task creation.
+Example TASKFILE illustrating dynamic task creation.
 
 Dynamically create file tasks to compile markdown source files to HTML.
 Execute them synchronously and asynchronously with 'compile-sync' and

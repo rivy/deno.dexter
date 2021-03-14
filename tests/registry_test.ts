@@ -1,6 +1,6 @@
 import { env } from '../src/lib/env.ts';
 import { desc, execute, run, task } from '../src/lib/registry.ts';
-import { TaskError, readFile, vers, writeFile } from '../src/lib/utils.ts';
+import { readFile, TaskError, vers, writeFile } from '../src/lib/utils.ts';
 import { assert, assertEquals, assertThrowsAsync, existsSync } from './deps.ts';
 env('--quiet', true);
 
@@ -95,19 +95,11 @@ Deno.test('registry_test', async function () {
 		Deno.removeSync(target);
 		task('exec', [], async () => await execute(normalTask, normalTask, target));
 		await run('exec');
-		assertEquals(
-			signature,
-			normalTask + normalTask + target,
-			"'execute' API should should execute serially"
-		);
+		assertEquals(signature, normalTask + normalTask + target, "'execute' API should should execute serially");
 
 		signature = '';
 		await run('exec');
-		assertEquals(
-			signature,
-			normalTask + normalTask,
-			"'execute' API should skip up to date task actions"
-		);
+		assertEquals(signature, normalTask + normalTask, "'execute' API should skip up to date task actions");
 
 		let counter = 0;
 		// deno-lint-ignore require-await

@@ -4,7 +4,7 @@ function help(): void {
 	console.log(manpage);
 }
 
-const manpage = String.raw`
+const manpage = String.raw `
 NAME
   dexter - a make-like task runner for Deno.
 

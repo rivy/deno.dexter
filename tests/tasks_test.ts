@@ -1,14 +1,7 @@
 import { existsSync } from '../src/lib/deps.ts';
 import { env } from '../src/lib/env.ts';
-import {
-	isFileTask,
-	isNormalTask,
-	normalizePath,
-	normalizeTaskName,
-	Task,
-	TaskRegistry,
-} from '../src/lib/tasks.ts';
-import { TaskError, readFile, writeFile } from '../src/lib/utils.ts';
+import { isFileTask, isNormalTask, normalizePath, normalizeTaskName, Task, TaskRegistry } from '../src/lib/tasks.ts';
+import { readFile, TaskError, writeFile } from '../src/lib/utils.ts';
 import { assert, assertEquals, assertThrows, assertThrowsAsync, path } from './deps.ts';
 
 const testFileName = path.parse(import.meta.url).name;

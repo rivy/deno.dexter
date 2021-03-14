@@ -1,12 +1,12 @@
 import {
 	abort,
-	TaskError,
 	glob,
 	makeDir,
 	quote,
 	readFile,
 	sh,
 	shCapture,
+	TaskError,
 	updateFile,
 	writeFile,
 } from '../src/lib/utils.ts';

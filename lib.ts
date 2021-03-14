@@ -3,7 +3,6 @@ export { env } from './src/lib/env.ts';
 export {
 	abort,
 	debug,
-	TaskError,
 	glob,
 	log,
 	makeDir,
@@ -11,6 +10,7 @@ export {
 	readFile,
 	sh,
 	shCapture,
+	TaskError,
 	updateFile,
 	writeFile,
 } from './src/lib/utils.ts';

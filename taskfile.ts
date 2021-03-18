@@ -1,7 +1,8 @@
 // deno-fmt-ignore-file
 
-// import * as Fae from 'https://deno.land/x/fae@v1.0.0/mod.ts';
+// import * as R from 'https://x.nest.land/ramda@0.27.0/mod.ts';
 import * as path from 'https://deno.land/std@0.83.0/path/mod.ts';
+import * as Fae from 'https://deno.land/x/fae@v1.0.0/mod.ts';
 
 export * from './mod.ts';
 import { desc, env, glob, log, makeDir, quote, run, runIfMain, sh, shCapture, task, writeFile } from './mod.ts';
@@ -56,23 +57,33 @@ class ExtendedMap<K, V> extends Map<K, V> {
 	}
 }
 
-const fileSetGlobs = new ExtendedMap([
-	['source', ['+(lib|mod)[.]ts', 'src/**/!(*[.]d)[.]ts']],
-	['examples', ['examples/!(*[.]d)[.]ts']],
-	['other', ['taskfile.ts']],
-	['tests', ['tests/!(*[.]d)[.]ts']],
-]);
+// const fileSetGlobs = new ExtendedMap([
+// 	['source', ['+(lib|mod)[.]ts', 'src/**/!(*[.]d)[.]ts']],
+// 	['examples', ['examples/!(*[.]d)[.]ts']],
+// 	['other', ['taskfile.ts']],
+// 	['tests', ['tests/!(*[.]d)[.]ts']],
+// ]);
 
-const fileSets = fileSetGlobs.map((value) => value.flatMap((v) => glob(v)));
-const allFiles = [...fileSets.values()].flat();
+// const fileSets = fileSetGlobs.map((value) => value.flatMap((v) => glob(v)));
+// const allFiles = [...fileSets.values()].flat();
+
+const fileSetGlobs = {
+	source: ['+(lib|mod)[.]ts', 'src/**/!(*[.]d)[.]ts'],
+	examples: ['examples/!(*[.]d)[.]ts'],
+	other: ['taskfile.ts'],
+	tests: ['tests/!(*[.]d)[.]ts'],
+};
+
+const fileSets = Fae.map((value: string[]) => value.flatMap((v) => glob(v)), fileSetGlobs);
+const allFiles = [...Object.values(fileSets)].flat();
 
 // console.log({
 // 	fileSets,
-// 	// source: [...fileSets.filter((_value, key) => ['source'].includes(key)).values()].flat(),
-// 	// other: [...fileSets.filter((_value, key) => ['examples', 'tests'].includes(key)).values()].flat(),
-// 	// // all: Array.from(fileSets.values()).flat(),
-// 	// all: [...fileSets.values()].flat(),
-// 	// allFiles,
+// 	// 	// source: [...fileSets.filter((_value, key) => ['source'].includes(key)).values()].flat(),
+// 	// 	// other: [...fileSets.filter((_value, key) => ['examples', 'tests'].includes(key)).values()].flat(),
+// 	// 	// // all: Array.from(fileSets.values()).flat(),
+// 	// 	// all: [...fileSets.values()].flat(),
+// 	allFiles,
 // });
 
 // const toObject = fileSets.toObject();

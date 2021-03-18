@@ -19,6 +19,7 @@ import { desc, env, glob, log, makeDir, quote, run, runIfMain, sh, shCapture, ta
 
 const quiet = env('--quiet') ? '--quiet' : '';
 const cwd = path.resolve('.');
+const repoDir = path.resolve(path.join(cwd, '..'));
 
 env('--default-task', 'test');
 
@@ -166,7 +167,9 @@ task('coverage', [], async function () {
 	} else {
 		makeDir('coverage');
 		writeFile('coverage/coverage.lcov', out);
-		// await sh(`genhtml -o coverage/html --prefix "${cwd}" coverage/coverage.lcov --branch-coverage --function-coverage`);
+		await sh(
+			`genhtml -o coverage/html --prefix "${repoDir}" coverage/coverage.lcov --branch-coverage --function-coverage`
+		);
 		// await sh(`genhtml -o coverage/html coverage/coverage.lcov --branch-coverage --function-coverage`);
 	}
 });

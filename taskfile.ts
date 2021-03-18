@@ -1,8 +1,9 @@
 // deno-fmt-ignore-file
 
-// import * as R from 'https://x.nest.land/ramda@0.27.0/mod.ts';
 import * as path from 'https://deno.land/std@0.83.0/path/mod.ts';
-import * as Fae from 'https://deno.land/x/fae@v1.0.0/mod.ts';
+// import * as Fae from 'https://deno.land/x/fae@v1.0.0/mod.ts';
+import * as R from 'https://deno.land/x/ramda@v0.27.2/mod.ts';
+import { replace } from 'https://deno.land/x/ramda@v0.27.2/mod.ts';
 
 export * from './mod.ts';
 import { desc, env, glob, log, makeDir, quote, run, runIfMain, sh, shCapture, task, writeFile } from './mod.ts';
@@ -74,16 +75,18 @@ const fileSetGlobs = {
 	tests: ['tests/!(*[.]d)[.]ts'],
 };
 
-const fileSets = Fae.map((value: string[]) => value.flatMap((v) => glob(v)), fileSetGlobs);
-const allFiles = [...Object.values(fileSets)].flat();
+const fileSets = R.map((value: string[]) => value.flatMap((v) => glob(v)), fileSetGlobs);
+const allFiles = [...R.values(fileSets)].flat();
+const lintableFiles = R.flatten(R.values(R.props(['source', 'examples', 'other'], fileSets)));
 
 // console.log({
 // 	fileSets,
-// 	// 	// source: [...fileSets.filter((_value, key) => ['source'].includes(key)).values()].flat(),
-// 	// 	// other: [...fileSets.filter((_value, key) => ['examples', 'tests'].includes(key)).values()].flat(),
-// 	// 	// // all: Array.from(fileSets.values()).flat(),
-// 	// 	// all: [...fileSets.values()].flat(),
+// 	// 	// 	// source: [...fileSets.filter((_value, key) => ['source'].includes(key)).values()].flat(),
+// 	// 	// 	// other: [...fileSets.filter((_value, key) => ['examples', 'tests'].includes(key)).values()].flat(),
+// 	// 	// 	// // all: Array.from(fileSets.values()).flat(),
+// 	// 	// 	// all: [...fileSets.values()].flat(),
 // 	allFiles,
+// 	lintableFiles,
 // });
 
 // const toObject = fileSets.toObject();
@@ -127,7 +130,8 @@ desc("format source files [alias 'format']");
 task('fmt', [], async function () {
 	// dprint-0.11.1 works on gitignore-style PATTERNs (not FILEs)
 	// * convert files to gitignore-style patterns
-	await sh(`dprint fmt ${quiet} ${quote(allFiles)}`);
+	const files = allFiles.map((v) => v.replace('\\', '/'));
+	await sh(`dprint fmt ${quiet} ${quote(files)}`);
 });
 task('format', ['fmt']);
 
@@ -136,14 +140,15 @@ task('lint', ['lint:code', 'lint:style']);
 
 desc('check for code lint (using `deno lint ...`)');
 task('lint:code', [], async function () {
-	await shCapture(`deno lint ${quiet} --unstable ${quote(allFiles)}`, { stderr: 'inherit', stdout: 'inherit' });
+	await shCapture(`deno lint ${quiet} --unstable ${quote(lintableFiles)}`, { stderr: 'inherit', stdout: 'inherit' });
 });
 
 desc('check for format imperfections (using `dprint`)');
 task('lint:style', [], async function () {
 	// dprint-0.11.1 works on gitignore-style PATTERNs (not FILEs)
 	// * convert files to gitignore-style patterns
-	await shCapture(`dprint check ${quiet} ${quote(allFiles)}`, {
+	const files = allFiles.map((v) => v.replace('\\', '/'));
+	await shCapture(`dprint check ${quiet} ${quote(files)}`, {
 		stderr: 'inherit',
 		stdout: 'inherit',
 	});

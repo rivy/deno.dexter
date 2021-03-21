@@ -154,7 +154,7 @@ export function makeDir(dir: string): boolean {
  */
 export function glob(...patterns: string[]): string[] {
 	function glob1(pattern: string): string[] {
-		const globOptions = { extended: true, globstar: true } as const;
+		const globOptions = { extended: true, globstar: true, os: 'windows' } as const;
 		pattern = path.normalizeGlob(pattern, globOptions);
 		let root = path.dirname(pattern);
 		while (root !== '.' && path.isGlob(root)) {

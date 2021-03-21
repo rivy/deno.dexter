@@ -8,17 +8,31 @@ import * as XTR from './mod.ts';
 
 function defaultTaskfile(root?: string): string | undefined {
 	const DEFAULT_TASKFILE = [/.?taskfile[.]ts/i];
-	return walkSync(root || '.', { maxDepth: 1, followSymlinks: true, match: DEFAULT_TASKFILE }).next().value.name;
+	return walkSync(root || '.', { maxDepth: 1, followSymlinks: true, match: DEFAULT_TASKFILE }).next().value?.name;
 }
+
+XTR.debug('debug', { Deno });
+
+const amCompiled = Path.parse(Deno.execPath()).name !== 'deno';
+XTR.debug('debug', { execPath: Deno.execPath(), amCompiled });
 
 const root = '.';
 const taskfile = defaultTaskfile(root);
 XTR.debug('debug', "taskfile='" + taskfile + "'");
 if (taskfile) {
-	// import paths *must* start with './' or '../'
-	const importPath = './' + Path.relative(root, taskfile);
-	const Taskfile = await import(importPath);
-	Taskfile.run();
+	if (!amCompiled) {
+		// import paths *must* start with './' or '../'
+		const importPath = './' + Path.relative(root, taskfile);
+		const Taskfile = await import(importPath);
+		Taskfile.run();
+	} else {
+		const process = Deno.run({ cmd: ['deno', 'run', '-A', taskfile, ...Deno.args] });
+		const status = await process.status();
+		process.close();
+		if (!status.success) {
+			Deno.exit(status.code);
+		}
+	}
 } else {
 	XTR.run();
 }

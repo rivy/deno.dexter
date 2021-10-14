@@ -70,10 +70,10 @@ class ExtendedMap<K, V> extends Map<K, V> {
 // const allFiles = [...fileSets.values()].flat();
 
 const fileSetGlobs = {
-	source: ['+(lib|mod)[.]ts', 'src/**/!(*[.]d)[.]ts'],
-	examples: ['examples/!(*[.]d)[.]ts'],
+	source: ['+(lib|mod).ts', 'src/**/!(*.d).ts'],
+	examples: ['examples/!(*.d).ts'],
 	other: ['taskfile.ts'],
-	tests: ['tests/!(*[.]d)[.]ts'],
+	tests: ['tests/!(*.d).ts'],
 };
 
 const fileSets = R.map((value: string[]) => value.flatMap((v) => glob(v)), fileSetGlobs);

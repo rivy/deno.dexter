@@ -1,10 +1,12 @@
 // requiredPermissions: --allow-all
 
+// spell-checker:ignore taskfile
+
 import * as Path from 'https://deno.land/std@0.90.0/path/mod.ts';
 import { walkSync } from 'https://deno.land/std@0.90.0/fs/walk.ts';
 // import xdgAppPaths from 'https://deno.land/x/xdg_app_paths@v7.3.0/src/mod.deno.ts';
 
-import * as XTR from './mod.ts';
+import * as XTR from '../../mod.ts';
 
 function defaultTaskfile(root?: string): string | undefined {
 	const DEFAULT_TASKFILE = [/.?taskfile[.]ts/i];
@@ -15,6 +17,7 @@ XTR.debug('debug', { Deno });
 
 const amCompiled = Path.parse(Deno.execPath()).name !== 'deno';
 XTR.debug('debug', { execPath: Deno.execPath(), amCompiled });
+XTR.debug('debug', { 0: Deno.env.get('_DENO_SHIM_0_') });
 
 const root = '.';
 const taskfile = defaultTaskfile(root);
